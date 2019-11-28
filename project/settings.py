@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'item',
     'auction',
     'crispy_forms',
+    'welcome',
 ]
 
 MIDDLEWARE = [

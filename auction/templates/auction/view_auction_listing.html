@@ -1,0 +1,101 @@
+{% load static %}
+<!-- 
+    HTML file for viewing an auction listing. Listing can be viewed
+    publicly. 
+
+    URL for this webpage is /auction/<int:id>
+
+ -->
+ {% include 'components/navbar.html' %}
+ <head>
+     <title>{{obj.item.title}}</title>
+     <script>
+         const url_get_data = "{% url 'auction_json' obj.id %}"
+         const url_post_bid = "{% url 'set_bid' obj.id %}"
+         let username = ''
+     </script>
+     
+    {% if user.is_authenticated %}
+        <script>
+            username = "{{ user.get_username }}"
+        </script>
+    {% endif %}
+  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="{% static 'auction/view_auction_listing.js' %}"></script>
+ </head>
+
+<div id="auction-details">
+    <div id="center-text">
+        <h1>{{obj.item.title}}</h1>
+        {% if obj.item.image %}
+            <img class="center" src ='{{obj.item.image.url}}' alt='Image of profile' width='400px'style="margin-top:15px"/>
+        {% else %}
+            <p>No images</p>
+        {% endif %}
+        <hr />
+        <p><strong>Description:</strong></p>
+        <p id='text'>{{obj.item.description}}</p>
+        <p style="margin-top:15px"><strong>Starting Bid:</strong> £{{obj.item.starting_price}}</p>
+        <p><strong>Listed by: </strong><a href="{% url 'public_profile' obj.seller.user.username %}">{{obj.seller.user.username}}</a></p>
+        <p id='deadline'><strong>Auction end date: </strong>{{obj.item_end_date}}</p>
+        <div id='notice'>
+            <p id='current_bid'></p>
+            <p id='highest_bidder'></p>
+        </div>
+        <table id='bidding'>
+            <tr>
+                <td>
+                    <input id='bid-input' type="number" class="form-control" step="0.1" 
+                        {% if obj.highest_bidder %}
+                            min='{{obj.current_bid}}' 
+                            value='{{obj.current_bid}}'    
+                        {% else %}
+                            min='{{obj.item.starting_price}}' 
+                            value='{{obj.item.starting_price}}'
+                        {% endif %}
+                    />
+                </td>
+                <td>
+                    <form type='POST'>
+                        {% csrf_token %}
+                        <button class="btn btn-primary" type='submit' id='bid-btn'>Bid</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+      
+    </div>
+</div>
+<style>
+H1 {
+    margin-top:25px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: royalblue;
+}
+P {
+    text-align: left;
+}
+#auction-details {
+    float: left;
+    position: relative;
+    left: 50%;
+}
+#center-text {
+    float: left;
+    position: relative;
+    left: -50%;
+}
+#text{
+  width: 400px;
+  word-break: break-word;
+}
+#bidding{
+    width : 400px;
+    margin :20px;
+    border-spacing: 5px;
+    border-collapse: separate;
+}
+
+</style>

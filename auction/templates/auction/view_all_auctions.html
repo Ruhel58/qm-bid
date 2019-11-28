@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<head>
+    <title>All Auctions</title>
+</head>
+<body>
+    {% include 'components/navbar.html' %}
+    
+    
+    <div id="auction-list">
+            <h1 align='center'>All Auctions</h1>
+            <div class="card">
+              <div class="card-header bg-success" id="headingOne">
+                <h5 class="mb-0">
+                  <button class="btn btn-link collapsed text-white" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    Ongoing Auctions
+                  </button>
+                </h5>
+              </div>
+              <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body" id='outer-body'>
+                    <ul class="list-group">
+                        {% for data in obj %}
+                            {% if data.active == True %}
+                                <li class="list-group-item">
+                                    <a href="{% url 'auction_view' data.id %}"> <h5>{{data.item.title}}</h5> </a><br /> 
+                                    Staring Price: £{{data.item.starting_price}} <br />
+                                    {% if data.current_bid == 0 %}
+                                        No one has bidded on this item yet
+                                    {% else %}
+                                        Current Bid: £{{data.current_bid}}
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header bg-danger" id="headingTwo">
+                <h5 class="mb-0">
+                  <button class="btn btn-link collapsed text-white" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Closed Auctions
+                  </button>
+                </h5>
+              </div>
+              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body" id='outer-body'>
+                    <ul class="list-group">
+                        {% for data in obj %}
+                            {% if data.active == False %}
+                                <li class="list-group-item">
+                                    <a href="{% url 'auction_view' data.id %}"> <h5>{{data.item.title}}</h5> </a><br /> 
+                                    {% if data.winner %}
+                                        Winner : {{data.winner.user.username}} <br/>
+                                        Winning Bid: £{{data.current_bid}}
+                                    {% else %}
+                                        No one won this auction
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+</body>
+
+<style>
+
+    #auction-list{
+        padding: 20px;
+        margin: 0 auto;
+        width: 65%;
+    }
+
+    #outer-body{
+        max-height: 500px;
+        margin-bottom: 10px;
+        overflow:scroll;
+    }
+</style>

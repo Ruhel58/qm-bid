@@ -1,0 +1,68 @@
+<!-- Javascript file is called search.js -->
+<!DOCTYPE html>
+<html>
+<head>
+  {% load static %}
+    <script>
+        let url = "{% url 'search' %}"
+        function reverse_auction_url(parameter){
+          return "{% url 'auction_view' 1 %}".replace("1", parameter);
+        }
+        function reverse_profile_url (parameter){
+          return "{% url 'public_profile' 1 %}".replace("1", parameter);
+        }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="{% static 'auction/search.js' %}"></script>
+
+<title>Home</title></head>
+  <body>
+    {% include 'components/navbar.html' %}
+    <div id='search'>
+      <form action='' method='POST'>
+        {% csrf_token %}
+        <table align="center">
+          <tr>
+            <td>
+              <input class="form-control" type="text" placeholder='Search Auction' id='search-input'/>
+            </td>
+            <td>
+              <button type="submit" id='submit-btn' class="btn btn-primary">Search</button>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+    <ul class="list-group" id='auction-list'>
+      {% for list in obj %}
+      <li class="list-group-item">
+        <h1><a href="{% url 'auction_view' list.id %}"> {{list.item.title}}</a></h1>
+        <p>Starting Bid: £{{list.item.starting_price}}</p>
+        <p>Listed by: <a href="{% url 'public_profile' list.seller.user.username %}">{{list.seller.user.username}}</a></p>
+        <p>Auction end date: {{list.item_end_date}}</p>
+      </li>
+      <br/>
+      {% endfor %}
+     
+  </ul>
+  </body>
+  <style>
+  #search-input {
+     height: 40px;
+     width: 500px;
+  }
+  #search {
+    margin: 25px;
+    text-align: center;
+  }
+  #items{
+    float: left;
+    position: relative;
+    left: -50%;
+    font-size: large;
+  }
+  .list-items li: a:hover {
+    background: PaleTurquoise;
+  }
+  </style>
+</html>

@@ -1,0 +1,10 @@
+{% load static %}
+{% include 'components/navbar.html' %}
+
+{% if obj.count > 0 %}
+    {% for result in obj %}
+        <p>{{result.item.title}}</p>
+    {% endfor %}
+{% else %}
+    <h3>No results</h3>
+{% endif %}

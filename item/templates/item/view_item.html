@@ -1,0 +1,29 @@
+<!-- 
+    HTML file for viewing an item that user has put up. These items can be viewed
+    publicly. AJAX request gets data in JSON form. 
+    URL paramenter is accessed here through Django engine and passed into 
+    the external js file for requests.  
+
+    URL for this webpage is /item/<int:id>
+
+    Note: Consider using base.html file & inheritance/extends
+ -->
+
+{% load static %}
+{% include 'components/navbar.html' %}
+
+    
+<h1>Item -- Edit this</h1>
+<h4>This is the screen which the public will be able to see</h4>
+
+<div id="item-details">
+    {% if obj.image %}
+        <img src ='{{obj.image.url}}' alt='Image of profile' width='250px'/>
+    {% else %}
+        <p>No images</p>
+    {% endif %}
+    <p><strong>Title: </strong>{{obj.title}}</p>
+    <p><strong>Description: </strong>{{obj.description}}</p>
+    <p><strong>Item is being sold by: </strong> {{obj.seller.user.first_name}} {{obj.seller.user.last_name}} </p>
+
+</div>

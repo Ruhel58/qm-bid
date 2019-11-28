@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<head>
+    <title>{{user.username}}'s profile</title>
+</head>
+<body>
+    {% include 'components/navbar.html' %}
+    <h2>Hi there {{ user.first_name }} {{ user.last_name }}</h2>
+
+    <table id='body-data'>
+        <tr>
+            <td>
+                <div class="card">
+                    <div class="card-header">
+                        <h4 align='center'>Bids that you won</h4> 
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group" id='table-data'>
+                            {% for auction in obj.won_bids %}
+                                <li class="list-group-item">
+                                    <a href="{% url 'auction_view' auction.id %}"><h5>{{auction.item.title}}</h5></a>
+                                    Cost: £{{auction.current_bid}}
+                                    <br />
+                                    Purchase date: {{auction.item_end_date}}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="card">
+                    <div class="card-header">
+                        <h4 align='center'>All your listings</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group" id='table-data'>
+                            {% for auction in obj.user_listings %}
+                                <li class="list-group-item">
+                                    <a href="{% url 'auction_view' auction.id %}"><h5>{{auction.item.title}}</h5></a>
+                                    Starting Price: £{{auction.item.starting_price}}
+                                    <br />
+                                    Auction end date: {{auction.item_end_date}}
+                                    <br />
+                                    Status: 
+                                        {% if auction.active %}
+                                            <span class="text-success">Ongoing</span>
+                                        {% else %}
+                                            <span class="text-danger">Ended</span>
+                                        {% endif %}
+                                    </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+
+<style>
+H2 {
+    text-align: center;
+    margin-top:25px;
+}
+
+#body-data{
+    margin: 0 auto;
+}
+
+#table-data{
+        max-height: 400px;
+        margin-bottom: 10px;
+        overflow:scroll;
+    }
+</style>

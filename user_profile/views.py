@@ -30,9 +30,16 @@ def register(request):
     return render(request, 'user_profile/signup_form.html', {'form' : form, 'custom_form' : custom_form})
 
 def user_view(request, username):
-    obj = get_object_or_404(get_user_model(), username = username)
+    user_account = get_object_or_404(get_user_model(), username = username)
+    profile = Profile.objects.get(user = user_account)
+    print(profile.dob)
+    user_listings = Auction.objects.filter(seller=profile)
+    print(user_listings)
     context = {
-        'profile' : obj
+        'obj' : {
+            'profile' : profile,
+            'user_listings' : user_listings
+        }
     }
     return render(request, 'user_profile/view_profile.html', context)
 

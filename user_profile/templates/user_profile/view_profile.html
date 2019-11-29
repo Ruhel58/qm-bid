@@ -1,11 +1,63 @@
-<!-- 
-    HTML file for viewing a user profile. The user profile can be viewed
-    publicly. Reminder to ensure sensitive information is not fetched from the database. 
-   
- -->
-
+<!DOCTYPE html>
+<head>
+    <title>{{profile.user.username}}'s profile</title>
+</head>
 {% load static %}
 {% include 'components/navbar.html' %}
-<h1>User Profile -- Edit this</h1>
-<h4>This is the screen which the public will be able to see</h4>
-<h3>{{profile.username}}</h3>
+<div id='top'>
+    <h1>Welcome to {{obj.profile.user.username}}'s profile</h1>
+    <p>To contact {{obj.profile.user.first_name}}, send an email to: {{obj.profile.user.email}}</p>
+</div>
+<table id='body-data'>
+        <tr>
+                <td>
+<div class="card">
+        <div class="card-header">
+            <h4 align='center'>All of {{obj.profile.user.username}}'s listngs</h4>
+        </div>
+        <div class="card-body">
+            <ul class="list-group" id='table-data'>
+                {% for auction in obj.user_listings %}
+                    <li class="list-group-item">
+                        <a href="{% url 'auction_view' auction.id %}"><h5>{{auction.item.title}}</h5></a>
+                        Starting Price: £{{auction.item.starting_price}}
+                        <br />
+                        Auction end date: {{auction.item_end_date}}
+                        <br />
+                        Status: 
+                            {% if auction.active %}
+                                <span class="text-success">Ongoing</span>
+                            {% else %}
+                                <span class="text-danger">Ended</span>
+                            {% endif %}
+                        </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    </td>
+    </tr>
+</table>
+
+
+
+<style>
+    #top{
+        margin-top:25px;
+        text-align: center;
+    }
+        H2 {
+            text-align: center;
+            margin-top:25px;
+        }
+        
+        #body-data{
+            margin: 0 auto;
+        }
+        
+        #table-data{
+                max-height: 400px;
+                margin-bottom: 10px;
+                overflow:scroll;
+            }
+        </style>
